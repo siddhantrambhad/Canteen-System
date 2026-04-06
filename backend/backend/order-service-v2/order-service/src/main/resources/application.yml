@@ -1,0 +1,39 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/canteen_order_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: tintin113
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+jwt:
+  secret: canteen-ordering-app-secret-key-2024!!
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+menu-service:
+  url: http://localhost:8081
+
+payment-service:
+  url: http://localhost:8083
+
+internal:
+  secret: canteen-internal-service-secret-2024
+razorpay:
+  key:
+    id: rzp_test_SRyLzj4F7xy2o2

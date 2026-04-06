@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Canteen Go Chatbot — Ask about today's menu, calories, orders, and payments.">
+    <title>Canteen Go Chatbot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="10" fill="#2c5282" />
+                        <path d="M12 14h6v12h-6zM22 14h6v12h-6zM15 20h10" stroke="#fff" stroke-width="2.2"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-title">Canteen Go</span>
+                    <span class="logo-subtitle">Chatbot</span>
+                </div>
+            </div>
+            <button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M4 5h12M4 10h12M4 15h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="sidebar-section-title">Quick Actions</h3>
+            <nav class="sidebar-nav" id="sidebarNav">
+                <button class="nav-item" data-query="Show today's menu">
+                    <span>Today's Menu</span>
+                </button>
+                <button class="nav-item" data-query="Calories for today's menu">
+                    <span>Calories (Today)</span>
+                </button>
+                <button class="nav-item" data-query="Suggest under 400 calories">
+                    <span>Healthy Picks</span>
+                </button>
+                <button class="nav-item" data-query="Payment help (Razorpay)">
+                    <span>Payment Help</span>
+                </button>
+                <button class="nav-item" data-query="How do refunds work?">
+                    <span>Refunds</span>
+                </button>
+                <button class="nav-item" data-query="Can I cancel an order?">
+                    <span>Cancel Order</span>
+                </button>
+            </nav>
+        </div>
+
+        <div class="sidebar-section sidebar-history" id="historySection">
+            <h3 class="sidebar-section-title">Recent Chats</h3>
+            <div class="history-list" id="historyList">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            <button class="new-chat-btn" id="newChatBtn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <line x1="12" y1="5" x2="12" y2="19" />
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                </svg>
+                New Conversation
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Chat Area -->
+    <main class="chat-main" id="chatMain">
+        <!-- Header -->
+        <header class="chat-header">
+            <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <line x1="3" y1="6" x2="21" y2="6" />
+                    <line x1="3" y1="12" x2="21" y2="12" />
+                    <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+            </button>
+            <div class="header-info">
+                <h1 class="header-title">Canteen Go Chatbot</h1>
+                <span class="header-status">
+                    <span class="status-dot"></span>
+                    Online
+                </span>
+            </div>
+            <div class="theme-switch-wrapper">
+                <span class="theme-switch-label">☀️</span>
+                <label class="theme-switch" for="themeToggle">
+                    <input type="checkbox" id="themeToggle" />
+                    <span class="slider"></span>
+                </label>
+                <span class="theme-switch-label">🌙</span>
+            </div>
+            <div class="lang-switch-wrapper" style="display: flex; gap: 3px; margin: 0 4px;">
+                <button class="lang-btn active" data-lang="English" style="background:#2c5282; color:white; border:1px solid #2c5282; border-radius:4px; padding:2px 4px; font-size:11px; cursor:pointer;">EN</button>
+                <button class="lang-btn" data-lang="Hindi" style="background:transparent; color:#2c5282; border:1px solid #2c5282; border-radius:4px; padding:2px 4px; font-size:11px; cursor:pointer;">HI</button>
+                <button class="lang-btn" data-lang="Marathi" style="background:transparent; color:#2c5282; border:1px solid #2c5282; border-radius:4px; padding:2px 4px; font-size:11px; cursor:pointer;">MR</button>
+            </div>
+            <button class="clear-chat-btn" id="clearChatBtn" aria-label="Clear chat" title="Clear chat">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round">
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2" />
+                </svg>
+            </button>
+        </header>
+
+        <!-- Messages Container -->
+        <div class="chat-messages" id="chatMessages">
+            <!-- Welcome Screen -->
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-icon">
+                    <svg viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="40" cy="40" r="38" stroke="#2c5282" stroke-width="2" fill="none" />
+                        <path d="M26 30h10v20H26zM44 30h10v20H44zM31 40h18" stroke="#2c5282" stroke-width="2.5"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <h2 class="welcome-title">Welcome to Canteen Go</h2>
+                <p class="welcome-text">Ask about today’s menu, calories, healthy options, payments, refunds,
+                    and ordering help. I’m here to help.</p>
+                <div class="suggestion-chips" id="suggestionChips">
+                    <button class="chip" data-query="Show today's menu">Today's Menu</button>
+                    <button class="chip" data-query="Calories for today's menu">Calories (Today)</button>
+                    <button class="chip" data-query="Suggest under 400 calories">Under 400 kcal</button>
+                    <button class="chip" data-query="How many calories is Dal Rice?">Calories in an Item</button>
+                    <button class="chip" data-query="Payment help (Razorpay)">Payment Help</button>
+                    <button class="chip" data-query="How do refunds work?">Refunds</button>
+                </div>
+            </div>
+
+            <!-- Typing Indicator -->
+            <div class="typing-indicator" id="typingIndicator">
+                <div class="typing-avatar">
+                    <svg viewBox="0 0 32 32" fill="none">
+                        <rect width="32" height="32" rx="8" fill="#2c5282" />
+                        <path d="M10 12h5v8h-5zM17 12h5v8h-5zM12.5 16h7" stroke="#fff" stroke-width="1.5"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="typing-dots">
+                    <span></span><span></span><span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Area -->
+        <div class="chat-input-area">
+            <div class="input-container">
+                <textarea id="messageInput" class="message-input" placeholder="Ask about menu, calories, or orders..." rows="1"
+                    aria-label="Type your message"></textarea>
+                <button class="send-btn" id="sendBtn" aria-label="Send message" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13" />
+                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                    </svg>
+                </button>
+            </div>
+            <p class="input-hint">Powered by Canteen Menu + Nutrition • Press <kbd>Enter</kbd> to send</p>
+        </div>
+    </main>
+
+    <!-- Mobile Overlay -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

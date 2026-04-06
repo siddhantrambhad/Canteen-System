@@ -1,0 +1,63 @@
+server:
+  port: 8080   # Frontend points to this port. Change here if needed.
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      routes:
+
+        - id: auth-service
+          uri: lb://auth-service
+          predicates:
+            - Path=/auth/**
+
+        - id: menu-service
+          uri: lb://menu-service
+          predicates:
+            - Path=/menu/**
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            - Path=/orders/**
+
+        # ── Payment Service ─────────────────────────────────────────
+        # POST /payments and POST /payments/create-order are called
+        # directly between services (order-service → payment-service)
+        # and never pass through this gateway.
+        # The browser only hits:
+        #   GET  /payments/order/{orderId}   — any authenticated user
+        #   GET  /payments/summary           — ADMIN only
+        - id: payment-service
+          uri: lb://payment-service
+          predicates:
+            - Path=/payments/**
+
+      default-filters:
+        - PreserveHostHeader
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: INFO
